@@ -1,0 +1,20 @@
+version: '3'
+services:
+  db:
+    image: aquiladb:local
+    container_name: aquiladb
+    restart: always
+    ports:
+      - 5001:5001
+    volumes:
+      - ${HOME}/aquilax/data:/data
+      - ${HOME}/aquilax/ossl:/ossl
+  hub:
+    image: aquilahub:local
+    container_name: aquilahub
+    restart: always
+    ports:
+      - 5002:5002
+    volumes:
+      - ${HOME}/aquilax/data:/data
+      - ${HOME}/aquilax/ossl:/ossl
