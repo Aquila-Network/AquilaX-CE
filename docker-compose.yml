@@ -18,7 +18,7 @@ services:
     volumes:
       - ${HOME}/aquilax/data:/data
       - ${HOME}/aquilax/ossl:/ossl
-  x:
+  ax:
     image: aquilax:local
     container_name: aquilax
     restart: always

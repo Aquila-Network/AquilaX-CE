@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+# cleanup
+docker-compose -p "aquilanet"  down
+
 # create aquilax data directory
 mkdir -p ${HOME}/aquilax/
 mkdir -p ${HOME}/aquilax/src
