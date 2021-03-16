@@ -9,6 +9,8 @@ mkdir -p ${HOME}/aquilax/src
 mkdir -p ${HOME}/aquilax/data
 mkdir -p ${HOME}/aquilax/data/models
 mkdir -p ${HOME}/aquilax/ossl
+mkdir -p ${HOME}/aquilax/nginx
+mkdir -p ${HOME}/aquilax/webpage
 
 echo "================================"
 echo "==== Downloading Base Model ===="
@@ -35,9 +37,15 @@ docker build https://raw.githubusercontent.com/Aquila-Network/AquilaHub/main/Doc
 # build aquilax image
 docker build https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/Dockerfile -t aquilax:local
 
+# setup X UI and nginx config
+rm -r ${HOME}/aquilax/webpage/*
+cd ${HOME}/aquilax/webpage/
+git clone https://github.com/Aquila-Network/search-ux.git .
+wget -c "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/nginx.conf" -P ${HOME}/aquilax/nginx/
+
 echo ${HOME}/aquilax/ossl
 
 # run docker compose
 cd ${HOME}/aquilax/src
-wget -c "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
+wget "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
 docker-compose -p "aquilanet"  up -d

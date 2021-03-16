@@ -26,3 +26,11 @@ services:
       - 5000:5000
     volumes:
       - ${HOME}/aquilax/ossl:/ossl
+  nginx: 
+    image: nginx:latest
+    container_name: nginx
+    volumes:
+      - ${HOME}/aquilax/nginx:/etc/nginx
+      - ${HOME}/aquilax/webpage/src:/usr/share/nginx/html
+    ports:
+      - 80:80
