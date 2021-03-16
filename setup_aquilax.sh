@@ -41,11 +41,13 @@ docker build https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/Do
 rm -r ${HOME}/aquilax/webpage/*
 cd ${HOME}/aquilax/webpage/
 git clone https://github.com/Aquila-Network/search-ux.git .
+rm ${HOME}/aquilax/nginx/nginx.conf
 wget -c "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/nginx.conf" -P ${HOME}/aquilax/nginx/
 
 echo ${HOME}/aquilax/ossl
 
 # run docker compose
 cd ${HOME}/aquilax/src
-wget "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
+rm docker-compose.yml
+wget -c "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
 docker-compose -p "aquilanet"  up -d
