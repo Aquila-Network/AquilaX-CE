@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 # cleanup
-docker-compose -p "aquilanet"  down
+# docker-compose -p "aquilanet"  down
 
 # create aquilax data directory
 mkdir -p ${HOME}/aquilax/
@@ -38,16 +38,13 @@ docker build https://raw.githubusercontent.com/Aquila-Network/AquilaHub/main/Doc
 docker build https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/Dockerfile -t aquilax:local
 
 # setup X UI and nginx config
-rm -r ${HOME}/aquilax/webpage/*
 cd ${HOME}/aquilax/webpage/
 git clone https://github.com/Aquila-Network/search-ux.git .
-rm ${HOME}/aquilax/nginx/nginx.conf
-wget -c "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/nginx.conf" -P ${HOME}/aquilax/nginx/
+wget "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/nginx.conf" -P ${HOME}/aquilax/nginx/
 
 echo ${HOME}/aquilax/ossl
 
 # run docker compose
 cd ${HOME}/aquilax/src
-rm docker-compose.yml
-wget -c "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
+wget "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
 docker-compose -p "aquilanet"  up -d
