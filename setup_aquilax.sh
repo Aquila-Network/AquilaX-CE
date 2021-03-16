@@ -30,11 +30,11 @@ docker build https://raw.githubusercontent.com/Aquila-Network/AquilaDB/master/Do
 docker build https://raw.githubusercontent.com/Aquila-Network/AquilaHub/main/Dockerfile -t aquilahub:local
 
 # build aquilax image
-docker build Dockerfile -t aquilax:local
+docker build https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/Dockerfile -t aquilax:local
 
 echo ${HOME}/aquilax/ossl
 
 # run docker compose
 cd ${HOME}/aquilax/src
-git clone https://github.com/Aquila-Network/AquilaX-CE.git .
-docker-compose up
+wget -c "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
+docker-compose -p "aquilanet"  up -d

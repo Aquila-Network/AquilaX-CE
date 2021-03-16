@@ -11,16 +11,17 @@ from multiprocessing import Process
 from aquilapy import Wallet, DB, Hub
 from bs4 import BeautifulSoup
 
-# Create a wallet instance from private key
-wallet = Wallet("/Users/jubinjose/works/aquila_network/pems/DO/private_unencrypted.pem")
 
-host = "http://0.0.0.0"
+app = Flask(__name__, instance_relative_config=True)
+
+# Create a wallet instance from private key
+wallet = Wallet("/ossl/private_unencrypted.pem")
 
 # Connect to Aquila DB instance
-db = DB(host, "5001", wallet)
+db = DB("http://aquiladb", "5001", wallet)
 
 # Connect to Aquila Hub instance
-hub = Hub(host, "5002", wallet)
+hub = Hub("http://aquilahub", "5002", wallet)
 
 # Schema definition to be used
 schema_def = {
@@ -46,7 +47,7 @@ def compress_strings (db_name, strings_in):
     return hub.compress_documents(db_name, strings_in)
 
 # Insert docs
-def index_website (db_name, html_doc):
+def index_website (db_name, html_doc, url):
     paragraphs = get_paragraphs(html_doc)
     compressed = compress_strings(db_name, paragraphs)
     docs = []
@@ -66,7 +67,7 @@ def index_website (db_name, html_doc):
         return False
 
 # Search docs
-def search(db_name, query):
+def search_docs(db_name, query):
     compressed = compress_strings(db_name, [query])
     docs, dists = db.search_k_documents(db_name, compressed, 100)
     index = {}
@@ -85,10 +86,12 @@ def search(db_name, query):
         results_d[key] = round(index[key] * score[key])
 
     results_d = {k: v for k, v in sorted(results_d.items(), key=lambda item: item[1], reverse=True)}
+
+    return results_d
     
     # threshold = -1
-    for key in results_d:
-        print(key, results_d[key])
+    # for key in results_d:
+        # print(key, results_d[key])
     #     if threshold == -1:
     #         threshold = round(results_d[key]*0.1)
     #     if results_d[key] > threshold:
@@ -104,20 +107,6 @@ def get_paragraphs(html_doc):
             if txt.strip() != "":
                 paras.append(" ".join(txt.strip().split()))
     return paras
-
-app = Flask(__name__, instance_relative_config=True)
-
-# Server starter
-def flaskserver ():
-    """
-    start server
-    """
-    app.run(host='0.0.0.0', port=5000, debug=False)
-
-server = Process(target=flaskserver)
-
-# Enable CORS
-CORS(app)
 
 # Add authentication
 def authenticate ():
@@ -163,8 +152,11 @@ def index_page ():
 
     # get parameters
     html_data = None
-    if extract_request_params(request).get("html"):
+    url = None
+    if extract_request_params(request).get("html") and extract_request_params(request).get("url"):
         html_data = extract_request_params(request)["html"]
+        url = extract_request_params(request)["url"]
+        print(url)
 
     if not html_data:
         # Build error response
@@ -174,7 +166,7 @@ def index_page ():
             }, 400
 
     global db_name
-    status = index_website(db_name, html_data)
+    status = index_website(db_name, html_data, url)
     # Build response
     if status:
         return {
@@ -194,30 +186,36 @@ def search ():
     """
 
     # get parameters
-    params = None
-    if extract_request_params(request).get("data"):
-        params = extract_request_params(request)["data"]
+    query = None
+    if extract_request_params(request).get("query"):
+        query = extract_request_params(request)["query"]
 
-    if not params:
+    if not query:
         # Build error response
         return {
                 "success": False,
                 "message": "Invalid parameters"
             }, 400
 
-    if "text" in params and "databaseName" in params:
-        vectors = router.compress_data(params.get("databaseName"), params.get("text"))
+    global db_name
+    urls = search_docs(db_name, query)
 
-        # Build response
-        return {
-                "success": True,
-                "vectors": vectors
-            }, 200
-    else:
-        return {
-                "success": False,
-                "message": "Invalid parameters"
-            }, 400
+    # Build response
+    return {
+            "success": True,
+            "result": urls
+        }, 200
+
+
+# Server starter
+def flaskserver ():
+    """
+    start server
+    """
+    app.run(host='0.0.0.0', port=5000, debug=False)
+
+# Enable CORS
+CORS(app)
 
 if __name__ == "__main__":
-    server.start()
+    flaskserver()

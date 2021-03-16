@@ -4,8 +4,8 @@ services:
     image: aquiladb:local
     container_name: aquiladb
     restart: always
-    ports:
-      - 5001:5001
+    # ports:
+      # - 5001:5001
     volumes:
       - ${HOME}/aquilax/data:/data
       - ${HOME}/aquilax/ossl:/ossl
@@ -13,8 +13,16 @@ services:
     image: aquilahub:local
     container_name: aquilahub
     restart: always
-    ports:
-      - 5002:5002
+    # ports:
+      # - 5002:5002
     volumes:
       - ${HOME}/aquilax/data:/data
+      - ${HOME}/aquilax/ossl:/ossl
+  x:
+    image: aquilax:local
+    container_name: aquilax
+    restart: always
+    ports:
+      - 5000:5000
+    volumes:
       - ${HOME}/aquilax/ossl:/ossl
