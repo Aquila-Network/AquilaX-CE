@@ -29,6 +29,9 @@ docker build https://raw.githubusercontent.com/Aquila-Network/AquilaDB/master/Do
 # build aqilahub image
 docker build https://raw.githubusercontent.com/Aquila-Network/AquilaHub/main/Dockerfile -t aquilahub:local
 
+# build aquilax image
+docker build Dockerfile -t aquilax:local
+
 echo ${HOME}/aquilax/ossl
 
 # run docker compose
