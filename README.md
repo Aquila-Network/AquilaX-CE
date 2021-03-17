@@ -8,7 +8,7 @@ Follow below steps and you are all set.
 - in Chrome / Chromium browser, go to `chrome://extensions/` and enable "developer mode"
 - click "Load unpacked" button and select "chrome" directory from the cloned repository above. You can make sure the extension gets installed when https://aquila.network website is opened automatically.
 ## 2. Server (Debian / Ubuntu)
-> Prerequisites: You need Docker and Docker-compose already installed in your system (4G RAM min. recommended).
+> Prerequisites: You need [Docker and Docker-compose already installed](https://gist.github.com/freakeinstein/23360053b2c33630b4417549f8e82577) in your system (4G RAM min. recommended).
 
 Now, run below command and wait a few minutes:
 ```
