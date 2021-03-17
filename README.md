@@ -3,6 +3,8 @@ Aquila X Community Edition.
 
 # Install
 Follow below steps and you are all set.
+
+Alternatively, follow this [video tutorial](https://chrome-ext-aquila.s3-ap-southeast-1.amazonaws.com/aquila+network+-+setup+Aquila+X.mov).
 ## 1. Chrome extension
 - `git clone https://github.com/Aquila-Network/AquilaX-browser-extension`
 - in Chrome / Chromium browser, go to `chrome://extensions/` and enable "developer mode"
