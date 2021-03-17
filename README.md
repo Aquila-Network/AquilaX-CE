@@ -19,3 +19,9 @@ wget -O - https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/setup
 Once the installation is completed, visit `http://<localhost / server IP>`
 
 In chrome extension, set the endpoint to `http://<localhost / server IP>/api/`
+
+# Considerations
+## 1. Security
+This software is still in its alpha version. Any wire security measures (inc. ssl, vpn) should be concern of and must be employed by the user.
+## 2. Changes
+Current implementations of Aquila Network Modules comply with latest draft specifications. Changes are subject to specification updates.
