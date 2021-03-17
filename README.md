@@ -15,4 +15,5 @@ Now, run below command and wait a few minutes:
 wget -O - https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/setup_aquilax.sh | /bin/bash
 ```
 Once the installation is completed, visit `http://<localhost / server IP>`
+
 In chrome extension, set the endpoint to `http://<localhost / server IP>/api/`
