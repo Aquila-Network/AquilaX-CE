@@ -98,9 +98,8 @@ def search_docs(db_name, query):
         results_d[key] = round(index[key] * score[key])
 
     results_d = {k: v for k, v in sorted(results_d.items(), key=lambda item: item[1], reverse=True)}
-    summary_ret = summarize(docs[0]["metadata"]["text"])
 
-    return results_d, summary_ret, QAgen(query, docs[0]["metadata"]["text"])
+    return results_d
     
     # threshold = -1
     # for key in results_d:
@@ -211,13 +210,41 @@ def search ():
             }, 400
 
     global db_name
-    urls, summary_r, ans_r = search_docs(db_name, query)
+    urls = search_docs(db_name, query)
+
+    # Build response
+    return {
+            "success": True,
+            "result": urls
+        }, 200
+
+@app.route("/augment", methods=['POST'])
+def augment ():
+    """
+    Augment matches
+    """
+
+    # get parameters
+    query = None
+    context = None
+    if extract_request_params(request).get("query") and extract_request_params(request).get("context"):
+        query = extract_request_params(request)["query"]
+        context = extract_request_params(request)["context"]
+
+    if not query and not context:
+        # Build error response
+        return {
+                "success": False,
+                "message": "Invalid parameters"
+            }, 400
+
+    summary_r = summarize(context)
+    ans_r = QAgen(query, context)
 
     # Build response
     return {
             "success": True,
             "result": {
-                "urls": urls,
                 "summary": summary_r,
                 "ans": ans_r
             }
