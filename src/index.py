@@ -12,8 +12,14 @@ from aquilapy import Wallet, DB, Hub
 from bs4 import BeautifulSoup
 
 from transformers import pipeline
-summarizer = pipeline("summarization")
-qa = pipeline("question-answering")
+summarizer = None # pipeline("summarization")
+qa = None # pipeline("question-answering")
+def init_augmentation ():
+    global summarizer
+    global qa
+    summarizer = pipeline("summarization")
+    qa = pipeline("question-answering")
+    return True
 
 
 app = Flask(__name__, instance_relative_config=True)
@@ -72,10 +78,14 @@ def index_website (db_name, html_doc, url):
 
 # generate summary
 def summarize(text):
+    if not summarizer:
+        init_augmentation()
     return summarizer(text[:1024], min_length=5, max_length=20)[0]["summary_text"]
 
 # generate QA
 def QAgen(query, context):
+    if not qa:
+        init_augmentation()
     return qa(question=query, context=context)
 
 # Search docs
