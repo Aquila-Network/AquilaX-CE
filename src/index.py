@@ -11,6 +11,10 @@ from multiprocessing import Process
 from aquilapy import Wallet, DB, Hub
 from bs4 import BeautifulSoup
 
+from transformers import pipeline
+summarizer = pipeline("summarization")
+qa = pipeline("question-answering")
+
 
 app = Flask(__name__, instance_relative_config=True)
 
@@ -66,6 +70,14 @@ def index_website (db_name, html_doc, url):
         logging.debug(e)
         return False
 
+# generate summary
+def summarize(text):
+    return summarizer(text[:1024], min_length=5, max_length=20)[0]["summary_text"]
+
+# generate QA
+def QAgen(query, context):
+    return qa(question=query, context=context)
+
 # Search docs
 def search_docs(db_name, query):
     compressed = compress_strings(db_name, [query])
@@ -86,8 +98,9 @@ def search_docs(db_name, query):
         results_d[key] = round(index[key] * score[key])
 
     results_d = {k: v for k, v in sorted(results_d.items(), key=lambda item: item[1], reverse=True)}
+    summary_ret = summarize(docs[0]["metadata"]["text"])
 
-    return results_d
+    return results_d, summary_ret, QAgen(query, docs[0]["metadata"]["text"])
     
     # threshold = -1
     # for key in results_d:
@@ -198,12 +211,16 @@ def search ():
             }, 400
 
     global db_name
-    urls = search_docs(db_name, query)
+    urls, summary_r, ans_r = search_docs(db_name, query)
 
     # Build response
     return {
             "success": True,
-            "result": urls
+            "result": {
+                "urls": urls,
+                "summary": summary_r,
+                "ans": ans_r
+            }
         }, 200
 
 
