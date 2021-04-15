@@ -173,7 +173,7 @@ def info ():
 @authenticate()
 def create_db ():
     """
-    Create a database for user
+    Create a database on demand given a random unique seed
     """
 
     # get parameters
