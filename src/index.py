@@ -54,7 +54,7 @@ def create_database (user_id):
     # Craete a database with the schema definition provided
     db_name_ = hub.create_database(schema_def)
 
-    return db_name
+    return db_name, True
 
 # Compress data
 def compress_strings (db_name, strings_in):
@@ -188,7 +188,7 @@ def create_db ():
                 "message": "Invalid parameters"
             }, 400
 
-    db_name = create_database(user_id)
+    db_name, status = create_database(user_id)
 
     # Build response
     if status:
