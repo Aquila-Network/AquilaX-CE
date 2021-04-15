@@ -33,24 +33,28 @@ db = DB("http://aquiladb", "5001", wallet)
 # Connect to Aquila Hub instance
 hub = Hub("http://aquilahub", "5002", wallet)
 
-# Schema definition to be used
-schema_def = {
-    "description": "Wikipedia",
-    "unique": "0",
-    "encoder": "ftxt:https://ftxt-models.s3.us-east-2.amazonaws.com/wiki_100d_en.bin",
-    "codelen": 100,
-    "metadata": {
-        "url": "string",
-        "text": "string"
+def create_database (user_id):
+
+    # Schema definition to be used
+    schema_def = {
+        "description": "Wikipedia",
+        "unique": user_id,
+        "encoder": "ftxt:https://ftxt-models.s3.us-east-2.amazonaws.com/wiki_100d_en.bin",
+        "codelen": 100,
+        "metadata": {
+            "url": "string",
+            "text": "string"
+        }
     }
-}
 
 
-# Craete a database with the schema definition provided
-db_name = db.create_database(schema_def)
+    # Craete a database with the schema definition provided
+    db_name = db.create_database(schema_def)
 
-# Craete a database with the schema definition provided
-db_name_ = hub.create_database(schema_def)
+    # Craete a database with the schema definition provided
+    db_name_ = hub.create_database(schema_def)
+
+    return db_name
 
 # Compress data
 def compress_strings (db_name, strings_in):
@@ -165,6 +169,39 @@ def info ():
             "message": "Aquila X is running healthy"
         }, 200
 
+@app.route("/create", methods=['POST'])
+@authenticate()
+def create_db ():
+    """
+    Create a database for user
+    """
+
+    # get parameters
+    user_id = None
+    if extract_request_params(request).get("seed"):
+        user_id = extract_request_params(request)["seed"]
+
+    if not user_id:
+        # Build error response
+        return {
+                "success": False,
+                "message": "Invalid parameters"
+            }, 400
+
+    db_name = create_database(user_id)
+
+    # Build response
+    if status:
+        return {
+                "success": True,
+                "databaseName": db_name
+            }, 200
+    else:
+        return {
+                "success": False,
+                "message": "Invalid schema definition"
+            }, 400
+
 @app.route("/index", methods=['POST'])
 @authenticate()
 def index_page ():
@@ -175,19 +212,19 @@ def index_page ():
     # get parameters
     html_data = None
     url = None
-    if extract_request_params(request).get("html") and extract_request_params(request).get("url"):
+    db_name = None
+    if extract_request_params(request).get("database") and extract_request_params(request).get("html") and extract_request_params(request).get("url"):
         html_data = extract_request_params(request)["html"]
         url = extract_request_params(request)["url"]
-        print(url)
+        db_name = extract_request_params(request)["database"]
 
-    if not html_data:
+    if not html_data or not url or not db_name:
         # Build error response
         return {
                 "success": False,
                 "message": "Invalid parameters"
             }, 400
 
-    global db_name
     status = index_website(db_name, html_data, url)
     # Build response
     if status:
@@ -209,17 +246,18 @@ def search ():
 
     # get parameters
     query = None
-    if extract_request_params(request).get("query"):
+    db_name = None
+    if extract_request_params(request).get("database") and extract_request_params(request).get("query"):
+        db_name = extract_request_params(request)["database"]
         query = extract_request_params(request)["query"]
 
-    if not query:
+    if not query or not db_name:
         # Build error response
         return {
                 "success": False,
                 "message": "Invalid parameters"
             }, 400
 
-    global db_name
     urls = search_docs(db_name, query)
 
     # Build response
