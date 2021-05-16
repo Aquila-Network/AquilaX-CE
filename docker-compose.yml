@@ -34,3 +34,4 @@ services:
       - ${HOME}/aquilax/webpage/src:/usr/share/nginx/html
     ports:
       - 80:80
+      - 443:443
