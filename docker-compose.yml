@@ -26,22 +26,6 @@ services:
       # - 5003:5003
     volumes:
       - ${HOME}/aquilax/ossl:/ossl
-  aqpxy:
-    image: aqpxy:local
-    container_name: aqpxy
-    restart: always
-    ports:
-      - 5000:5000
-    volumes:
-      - ${HOME}/aquilax/data:/home/data
-  pdb:
-    image: tiedot:local
-    container_name: pdb
-    restart: always
-    ports:
-      - 5534:5534
-    volumes:
-      - ${HOME}/aquilax/data:/home/data
   nginx: 
     image: nginx:latest
     container_name: nginx
