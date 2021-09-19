@@ -1,6 +1,16 @@
 # AquilaX-CE
 Aquila X Community Edition.
 
+Aquila X is the gateway to Aquila Network and it's applications. Here is where Aquila X fits in the entire ecosystem:
+<div align="center">
+  <img
+    src="https://user-images.githubusercontent.com/19545678/133918445-fe8aab2a-0eb3-483a-bac0-dd6125adddeb.png"
+    alt="Aquila DB Architecture"
+    height="400"
+  />
+ <br/>
+</div>
+
 # Install
 Follow below steps and you are all set.
 
