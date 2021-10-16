@@ -37,8 +37,9 @@ Follow below steps and you are all set.
 
 Alternatively, follow this [video tutorial](https://chrome-ext-aquila.s3-ap-southeast-1.amazonaws.com/aquila+network+-+setup+Aquila+X.mov).
 ## Step 1. Chrome extension
-### Install from chrome web store (recommended)
-[![addtochrome](https://user-images.githubusercontent.com/68724239/111738541-92476300-88a7-11eb-8444-3f2baa515b9c.png)](https://chrome.google.com/webstore/detail/aquila-x/albdahjdcmldbcpjmbnbcbckgndaibnk)
+### Install from web store (recommended)
+[<img height=46px src="https://user-images.githubusercontent.com/68724239/111738541-92476300-88a7-11eb-8444-3f2baa515b9c.png"/>](https://chrome.google.com/webstore/detail/aquila-x/albdahjdcmldbcpjmbnbcbckgndaibnk)
+[<img height=46px src="https://user-images.githubusercontent.com/19545678/137582002-85df2d6f-2ad5-43ca-a673-04f4925b8c41.png"/>](https://addons.mozilla.org/en-US/firefox/addon/aquilax/)
 ### Install from source code
 - `git clone https://github.com/Aquila-Network/AquilaX-browser-extension`
 - in Chrome / Chromium / Brave browser, go to `chrome://extensions/` and enable "developer mode"
