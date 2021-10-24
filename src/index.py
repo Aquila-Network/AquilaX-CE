@@ -33,6 +33,9 @@ db = DB("http://aquiladb", "5001", wallet)
 # Connect to Aquila Hub instance
 hub = Hub("http://aquilahub", "5002", wallet)
 
+# default database
+default_database_name = None
+
 def create_database (user_id):
 
     # Schema definition to be used
@@ -213,10 +216,13 @@ def index_page ():
     html_data = None
     url = None
     db_name = None
-    if extract_request_params(request).get("database") and extract_request_params(request).get("html") and extract_request_params(request).get("url"):
+    if extract_request_params(request).get("html") and extract_request_params(request).get("url"):
         html_data = extract_request_params(request)["html"]
         url = extract_request_params(request)["url"]
-        db_name = extract_request_params(request)["database"]
+
+        db_name = default_database_name
+        if extract_request_params(request).get("database"):
+            db_name = extract_request_params(request)["database"]
 
     if not html_data or not url or not db_name:
         # Build error response
@@ -247,9 +253,12 @@ def search ():
     # get parameters
     query = None
     db_name = None
-    if extract_request_params(request).get("database") and extract_request_params(request).get("query"):
-        db_name = extract_request_params(request)["database"]
+    if extract_request_params(request).get("query"):
         query = extract_request_params(request)["query"]
+
+        db_name = default_database_name
+        if extract_request_params(request).get("database"):
+            db_name = extract_request_params(request)["database"]
 
     if not query or not db_name:
         # Build error response
@@ -311,7 +320,7 @@ CORS(app)
 
 if __name__ == "__main__":
     # create default database
-    db_name, status = create_database("default")
-    logging.debug("Default DB name: " + db_name)
+    default_database_name, status = create_database("default")
+    logging.debug("Default DB name: " + default_database_name)
     if status:
         flaskserver()
