@@ -13,9 +13,9 @@ mkdir -p ${HOME}/aquilax/nginx
 mkdir -p ${HOME}/aquilax/webpage
 
 echo "================================"
-echo "==== Downloading Base Model ===="
+echo "==== Building Docker Images ===="
 echo "================================"
-wget -c "https://ftxt-models.s3.us-east-2.amazonaws.com/wiki_100d_en.bin" -P ${HOME}/aquilax/data/models/
+# wget -c "https://ftxt-models.s3.us-east-2.amazonaws.com/wiki_100d_en.bin" -P ${HOME}/aquilax/data/models/
 
 # setup ossl keys
 if ! test -f ${HOME}/aquilax/ossl/private.pem; then
@@ -48,3 +48,7 @@ echo ${HOME}/aquilax/ossl
 cd ${HOME}/aquilax/src
 wget "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
 docker-compose -p "aquilanet"  up -d
+
+echo "=================================="
+echo "=== Visit: http://localhost:80 ==="
+echo "=================================="
