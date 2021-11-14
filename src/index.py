@@ -42,8 +42,8 @@ def create_database (user_id):
     schema_def = {
         "description": "Wikipedia",
         "unique": user_id,
-        "encoder": "ftxt:https://ftxt-models.s3.us-east-2.amazonaws.com/wiki_100d_en.bin",
-        "codelen": 100,
+        "encoder": "strn:msmarco-distilbert-base-tas-b",
+        "codelen": 768,
         "metadata": {
             "url": "string",
             "text": "string"
