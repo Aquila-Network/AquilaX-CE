@@ -15,7 +15,6 @@ mkdir -p ${HOME}/aquilax/webpage
 echo "================================"
 echo "==== Building Docker Images ===="
 echo "================================"
-# wget -c "https://ftxt-models.s3.us-east-2.amazonaws.com/wiki_100d_en.bin" -P ${HOME}/aquilax/data/models/
 
 # setup ossl keys
 if ! test -f ${HOME}/aquilax/ossl/private.pem; then
@@ -36,6 +35,10 @@ docker build https://raw.githubusercontent.com/Aquila-Network/AquilaHub/main/Doc
 
 # build aquilax image
 docker build https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/Dockerfile -t aquilax:local
+
+# build txt processing service
+docker build https://raw.githubusercontent.com/Aquila-Network/txtprocess/main/Dockerfile_mercury -t mercury:local
+docker build https://raw.githubusercontent.com/Aquila-Network/txtprocess/main/Dockerfile_txtpick -t txtpick:local
 
 # setup X UI and nginx config
 cd ${HOME}/aquilax/webpage/

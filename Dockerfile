@@ -29,7 +29,7 @@ RUN mkdir -p /ossl/ && \
 # install and start demon
 RUN mkdir -p /data && \
     printf "#!/bin/bash\nsource env/bin/activate && cd ax/src && \
-    python3 index.py" > /bin/init.sh && chmod +x /bin/init.sh
+    python3 migrations/migrate_logging.py && python3 index.py" > /bin/init.sh && chmod +x /bin/init.sh
 
 # expose port
 EXPOSE 5000
