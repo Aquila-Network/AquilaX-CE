@@ -25,7 +25,20 @@ services:
     # ports:
       # - 5003:5003
     volumes:
+      - ${HOME}/aquilax/data:/data
       - ${HOME}/aquilax/ossl:/ossl
+  mercury:
+    image: mercury:local
+    container_name: mercury
+    restart: always
+    # ports:
+    #   - 5009:5009
+  txtpick:
+    image: txtpick:local
+    container_name: txtpick
+    restart: always
+    # ports:
+    #   - 5008:5008
   nginx: 
     image: nginx:latest
     container_name: nginx
