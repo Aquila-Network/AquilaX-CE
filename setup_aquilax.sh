@@ -37,8 +37,11 @@ docker build https://raw.githubusercontent.com/Aquila-Network/AquilaHub/main/Doc
 docker build https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/Dockerfile -t aquilax:local
 
 # build txt processing service
-docker build https://raw.githubusercontent.com/Aquila-Network/txtprocess/main/Dockerfile_mercury -t mercury:local
-docker build https://raw.githubusercontent.com/Aquila-Network/txtprocess/main/Dockerfile_txtpick -t txtpick:local
+mkdir -p ${HOME}/txtp
+cd ${HOME}/txtp
+git clone https://github.com/Aquila-Network/txtprocess.git .
+docker build -f Dockerfile_mercury -t mercury:local .
+docker build -f Dockerfile_txtpick -t txtpick:local .
 
 # setup X UI and nginx config
 cd ${HOME}/aquilax/webpage/
@@ -52,6 +55,8 @@ cd ${HOME}/aquilax/src
 wget "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
 docker-compose -p "aquilanet"  up -d
 
-echo "=================================="
-echo "=== Visit: http://localhost:80 ==="
-echo "=================================="
+echo "==================================="
+echo "=== Visit: http://localhost:80 ===="
+echo "==================================="
+echo "Install browser extensions:"
+echo "https://github.com/Aquila-Network/AquilaX-browser-extension"
