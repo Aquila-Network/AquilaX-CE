@@ -22,6 +22,9 @@ db = DB("http://aquiladb", "5001", wallet)
 # Connect to Aquila Hub instance
 hub = Hub("http://aquilahub", "5002", wallet)
 
+# default database name
+default_database_name = None
+
 def create_database (user_id):
 
     # Schema definition to be used
@@ -176,11 +179,13 @@ def index_page ():
     # get parameters
     html_data = None
     url = None
-    db_name = None
-    if extract_request_params(request).get("database") and extract_request_params(request).get("html") and extract_request_params(request).get("url"):
+    db_name = default_database_name
+    if extract_request_params(request).get("database"):
+        db_name = extract_request_params(request)["database"]
+    
+    if extract_request_params(request).get("html") and extract_request_params(request).get("url"):
         html_data = extract_request_params(request)["html"]
         url = extract_request_params(request)["url"]
-        db_name = extract_request_params(request)["database"]
 
     if not html_data or not url or not db_name:
         # Build error response
@@ -222,9 +227,11 @@ def search ():
 
     # get parameters
     query = None
-    db_name = None
-    if extract_request_params(request).get("database") and extract_request_params(request).get("query"):
+    db_name = default_database_name
+    if extract_request_params(request).get("database"):
         db_name = extract_request_params(request)["database"]
+        
+    if extract_request_params(request).get("query"):
         query = extract_request_params(request)["query"]
 
     if not query or not db_name:
@@ -257,11 +264,13 @@ def correct ():
 
     # get parameters
     query = None
-    db_name = None
+    db_name = default_database_name
     url = None
-    if extract_request_params(request).get("query") and extract_request_params(request).get("database") and extract_request_params(request).get("url"):
-        query = extract_request_params(request)["query"]
+    if extract_request_params(request).get("database"):
         db_name = extract_request_params(request)["database"]
+
+    if extract_request_params(request).get("query") and extract_request_params(request).get("url"):
+        query = extract_request_params(request)["query"]
         url = extract_request_params(request)["url"]
 
     if not query and not db_name and not url:
@@ -291,11 +300,13 @@ def listall ():
 
     # get parameters
     page = None
-    db_name = None
+    db_name = default_database_name
     limit = None
-    if extract_request_params(request).get("page") and extract_request_params(request).get("database") and extract_request_params(request).get("limit"):
-        page = extract_request_params(request)["page"]
+    if extract_request_params(request).get("database"):
         db_name = extract_request_params(request)["database"]
+
+    if extract_request_params(request).get("page") and extract_request_params(request).get("limit"):
+        page = extract_request_params(request)["page"]
         limit = extract_request_params(request)["limit"]
 
     if not page and not db_name and not limit:
@@ -327,9 +338,12 @@ def summary ():
 
     # get parameters
     urls = None
+    db_name = default_database_name
+    if extract_request_params(request).get("database"):
+        db_name = extract_request_params(request)["database"]
+
     if extract_request_params(request).get("urls"):
         urls = extract_request_params(request)["urls"]
-        db_name = extract_request_params(request)["database"]
 
     if not urls:
         # Build error response
@@ -362,6 +376,8 @@ CORS(app)
 if __name__ == "__main__":
     # create default database
     db_name, status = create_database("default")
-    logging.debug("Default DB name: " + db_name)
     if status:
+        default_database_name = db_name
+        logging.debug("Default DB name: " + default_database_name)
+        # start server
         flaskserver()
