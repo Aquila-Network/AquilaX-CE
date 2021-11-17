@@ -15,7 +15,6 @@ mkdir -p ${HOME}/aquilax/webpage
 echo "================================"
 echo "==== Building Docker Images ===="
 echo "================================"
-# wget -c "https://ftxt-models.s3.us-east-2.amazonaws.com/wiki_100d_en.bin" -P ${HOME}/aquilax/data/models/
 
 # setup ossl keys
 if ! test -f ${HOME}/aquilax/ossl/private.pem; then
@@ -37,6 +36,13 @@ docker build https://raw.githubusercontent.com/Aquila-Network/AquilaHub/main/Doc
 # build aquilax image
 docker build https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/Dockerfile -t aquilax:local
 
+# build txt processing service
+mkdir -p ${HOME}/txtp
+cd ${HOME}/txtp
+git clone https://github.com/Aquila-Network/txtprocess.git .
+docker build -f Dockerfile_mercury -t mercury:local .
+docker build -f Dockerfile_txtpick -t txtpick:local .
+
 # setup X UI and nginx config
 cd ${HOME}/aquilax/webpage/
 git clone https://github.com/Aquila-Network/search-ux.git .
@@ -49,6 +55,16 @@ cd ${HOME}/aquilax/src
 wget "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
 docker-compose -p "aquilanet"  up -d
 
-echo "=================================="
-echo "=== Visit: http://localhost:80 ==="
-echo "=================================="
+echo "Aquila Network setup complete.."
+echo ""
+echo "==================================="
+echo "=== Visit: http://localhost:80 ===="
+echo "==================================="
+echo ""
+echo "Install browser extensions from here:"
+echo "https://github.com/Aquila-Network/AquilaX-browser-extension"
+echo ""
+echo "Thanks for installing Aquila Network, don't forget to give us a **star** in Github." 
+echo "Have a nice day!"
+echo ""
+echo ""
