@@ -223,4 +223,3 @@ def put_log_correct (session, database_name, query, url):
         return False
 
     return True
-
