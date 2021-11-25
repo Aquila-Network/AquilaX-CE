@@ -55,16 +55,14 @@ cd ${HOME}/aquilax/src
 wget "https://raw.githubusercontent.com/Aquila-Network/AquilaX-CE/main/docker-compose.yml"
 docker-compose -p "aquilanet"  up -d
 
-echo "Aquila Network setup complete.."
+echo "Aquila Network server setup complete.."
 echo ""
 echo "==================================="
 echo "=== Visit: http://localhost:80 ===="
 echo "==================================="
 echo ""
-echo "Install browser extensions from here:"
-echo "https://github.com/Aquila-Network/AquilaX-browser-extension"
-echo ""
 echo "Thanks for installing Aquila Network, don't forget to give us a **star** in Github." 
+echo "https://github.com/Aquila-Network/AquilaDB" 
 echo "Have a nice day!"
 echo ""
 echo ""
